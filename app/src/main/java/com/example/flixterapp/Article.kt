@@ -1,4 +1,4 @@
-package com.codepath.articlesearch
+package ccom.example.flixterapp
 
 import android.support.annotation.Keep
 import kotlinx.serialization.SerialName

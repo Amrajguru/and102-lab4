@@ -1,4 +1,4 @@
-package com.codepath.articlesearch
+package com.example.flixterapp
 
 import android.os.Bundle
 import android.util.Log
@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.codepath.articlesearch.databinding.ActivityMainBinding
+import com.example.flixterapp.databinding.ActivityMainBinding
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
 import kotlinx.serialization.json.Json
@@ -21,12 +21,12 @@ fun createJson() = Json {
 
 private const val TAG = "MainActivity/"
 private val SEARCH_API_KEY = BuildConfig.API_KEY
-private val ARTICLE_SEARCH_URL =
-    "https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${SEARCH_API_KEY}"
+private val MOVIES_SEARCH_URL =
+    "https://api.themoviedb.org/3/movie/popular?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed"
 
 class MainActivity : AppCompatActivity() {
-    private val articles = mutableListOf<Article>()
-    private lateinit var articlesRecyclerView: RecyclerView
+    private val movies = mutableListOf<Movies>()
+    private lateinit var moviesRecyclerView: RecyclerView
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,17 +36,17 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        articlesRecyclerView = findViewById(R.id.articles)
-        val articleAdapter = ArticleAdapter(this, articles)
-        articlesRecyclerView.adapter = articleAdapter
+        moviesRecyclerView = findViewById(R.id.movies)
+        val articleAdapter = MoviesAdapter(this, movies)
+        moviesRecyclerView.adapter = articleAdapter
 
-        articlesRecyclerView.layoutManager = LinearLayoutManager(this).also {
+        moviesRecyclerView.layoutManager = LinearLayoutManager(this).also {
             val dividerItemDecoration = DividerItemDecoration(this, it.orientation)
-            articlesRecyclerView.addItemDecoration(dividerItemDecoration)
+            moviesRecyclerView.addItemDecoration(dividerItemDecoration)
         }
 
         val client = AsyncHttpClient()
-        client.get(ARTICLE_SEARCH_URL, object : JsonHttpResponseHandler() {
+        client.get(MOVIES_SEARCH_URL, object : JsonHttpResponseHandler() {
             override fun onFailure(
                 statusCode: Int,
                 headers: Headers?,
@@ -62,15 +62,15 @@ class MainActivity : AppCompatActivity() {
 
                     // TODO: Create the parsedJSON
                     val parsedJson = createJson().decodeFromString(
-                        SearchNewsResponse.serializer(),
+                        BaseResponse.serializer(),
                         json.jsonObject.toString()
                     )
 
                     // TODO: Do something with the returned json (contains article information)
 
                     // TODO: Save the articles and reload the screen
-                    parsedJson.response?.docs?.let { list ->
-                        articles.addAll(list)
+                    parsedJson.results?.let { list ->
+                        movies.addAll(list)
                     }
                     // Reload the screen
                     articleAdapter.notifyDataSetChanged()
