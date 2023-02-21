@@ -1,4 +1,4 @@
-package com.example.flixterapp
+package com.codepath.articlesearch
 
 import android.os.Bundle
 import android.widget.ImageView
@@ -11,30 +11,27 @@ private const val TAG = "DetailActivity"
 class DetailActivity : AppCompatActivity() {
     private lateinit var mediaImageView: ImageView
     private lateinit var titleTextView: TextView
-    private lateinit var overviewTextView: TextView
-    private lateinit var ratingTextView: TextView
-    private lateinit var releaseTextView: TextView
+    private lateinit var bylineTextView: TextView
+    private lateinit var abstractTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
 
         // TODO: Find the views for the screen
-        mediaImageView = findViewById(R.id.movieImage)
-        titleTextView = findViewById(R.id.movieTitle)
-        overviewTextView = findViewById(R.id.movieOverview)
-        ratingTextView = findViewById(R.id.movieRating)
-        releaseTextView = findViewById(R.id.movieReleaseDate)
+        mediaImageView = findViewById(R.id.mediaImage)
+        titleTextView = findViewById(R.id.mediaTitle)
+        bylineTextView = findViewById(R.id.mediaByline)
+        abstractTextView = findViewById(R.id.mediaAbstract)
         // TODO: Get the extra from the Intent
-        val movie = intent.getSerializableExtra(MOVIES_EXTRA) as Movies
+        val article = intent.getSerializableExtra(ARTICLE_EXTRA) as Article
         // TODO: Set the title, byline, and abstract information from the article
-        titleTextView.text = movie.title
-        overviewTextView.text = movie.overview
-        ratingTextView.text = movie.voteaverage
-        releaseTextView.text = movie.rdate
+        titleTextView.text = article.headline?.main
+        bylineTextView.text = article.byline?.original
+        abstractTextView.text = article.abstract
         // TODO: Load the media image
         Glide.with(this)
-            .load(movie.mediaImageUrl)
+            .load(article.mediaImageUrl)
             .into(mediaImageView)
 
     }

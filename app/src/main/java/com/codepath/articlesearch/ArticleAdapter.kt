@@ -1,4 +1,4 @@
-package com.example.flixterapp
+package com.codepath.articlesearch
 
 import android.content.Context
 import android.content.Intent
@@ -10,11 +10,11 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-const val MOVIES_EXTRA = "MOVIES_EXTRA"
-private const val TAG = "MoviesAdapter"
+const val ARTICLE_EXTRA = "ARTICLE_EXTRA"
+private const val TAG = "ArticleAdapter"
 
-class MoviesAdapter(private val context: Context, private val movies: List<Movies>) :
-    RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+class ArticleAdapter(private val context: Context, private val articles: List<Article>) :
+    RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_article, parent, false)
@@ -22,27 +22,27 @@ class MoviesAdapter(private val context: Context, private val movies: List<Movie
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie = movies[position]
-        holder.bind(movie)
+        val article = articles[position]
+        holder.bind(article)
     }
 
-    override fun getItemCount() =movies.size
+    override fun getItemCount() = articles.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        private val mediaImageView = itemView.findViewById<ImageView>(R.id.movieImage)
-        private val titleTextView = itemView.findViewById<TextView>(R.id.movieTitle)
-        private val voteaverageTextView = itemView.findViewById<TextView>(R.id.movieRating)
+        private val mediaImageView = itemView.findViewById<ImageView>(R.id.mediaImage)
+        private val titleTextView = itemView.findViewById<TextView>(R.id.mediaTitle)
+        private val abstractTextView = itemView.findViewById<TextView>(R.id.mediaAbstract)
 
         init {
             itemView.setOnClickListener(this)
         }
 
         // TODO: Write a helper method to help set up the onBindViewHolder method
-        fun bind(article: Movies) {
-            titleTextView.text = article.title
-            voteaverageTextView.text = article.voteaverage
+        fun bind(article: Article) {
+            titleTextView.text = article.headline?.main
+            abstractTextView.text = article.abstract
 
             Glide.with(context)
                 .load(article.mediaImageUrl)
@@ -51,11 +51,11 @@ class MoviesAdapter(private val context: Context, private val movies: List<Movie
 
         override fun onClick(v: View?) {
             // TODO: Get selected article
-            val article = movies[absoluteAdapterPosition]
+            val article = articles[absoluteAdapterPosition]
 
             // TODO: Navigate to Details screen and pass selected article
             val intent = Intent(context, DetailActivity::class.java)
-            intent.putExtra(MOVIES_EXTRA, article)
+            intent.putExtra(ARTICLE_EXTRA, article)
             context.startActivity(intent)
         }
     }
